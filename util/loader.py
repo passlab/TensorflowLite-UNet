@@ -86,9 +86,14 @@ class Loader(object):
         images_segmented = np.asarray(images_segmented, dtype=np.uint8)
 
         # Change indices which correspond to "void" from 255
-        images_segmented = np.where((images_segmented != 15) & (images_segmented != 255), 0, images_segmented)
-        images_segmented = np.where(images_segmented == 15, 1, images_segmented)
-        images_segmented = np.where(images_segmented == 255, len(DataSet.CATEGORY)-1, images_segmented)
+        #images_segmented = np.where((images_segmented != 15) & (images_segmented != 255), 0, images_segmented)
+        #images_segmented = np.where(images_segmented == 15, 1, images_segmented)
+        #images_segmented = np.where(images_segmented == 255, len(DataSet.CATEGORY)-1, images_segmented)
+        images_segmented=np.where(images_segmented<=127.5,0,images_segmented)
+        images_segmented=np.where(images_segmented>127.5,1,images_segmented)
+
+        np.save('asd.npy',images_segmented)
+
 
         # One hot encoding using identity matrix.
         if one_hot:
@@ -152,8 +157,8 @@ class Loader(object):
 
 class DataSet(object):
     CATEGORY = (
-        "ground",
-        "person",
+        #"ground",
+        "cell",
         "void"
     )
 
@@ -232,8 +237,8 @@ class DataSet(object):
 
 
 if __name__ == "__main__":
-    dataset_loader = Loader(dir_original="../data_set/VOCdevkit/person/JPEGImages",
-                            dir_segmented="../data_set/VOCdevkit/person/SegmentationClass")
+    dataset_loader = Loader(dir_original="../data_set/ISBI/JPEGImages",
+                            dir_segmented="../data_set/ISBI/SegmentationClass")
     train, test = dataset_loader.load_train_test()
     train.print_information()
     test.print_information()

@@ -1,0 +1,1 @@
+python freeze_graph.py --input_graph=model/cell/semanticsegmentation_cell.pbtxt --input_checkpoint=model/cell/deployfinal.ckpt --output_graph=model/cell/semanticsegmentation_frozen_cell.pb --output_node_names=output/BiasAdd --input_binary=False

@@ -13,17 +13,18 @@ from util import repoter as rp
 
 
 def load_dataset(train_rate):
-    loader = ld.Loader(dir_original="data_set/VOCdevkit/person/JPEGImagesOUT",
-                       dir_segmented="data_set/VOCdevkit/person/SegmentationClassOUT")
-    return loader.load_train_test(train_rate=train_rate, shuffle=False)
+    loader = ld.Loader(dir_original="data_set/ISBI/JPEGImages",
+                       dir_segmented="data_set/ISBI/SegmentationClass")
+    return loader.load_train_test(train_rate=0.80, shuffle=False)
 
 
 def train(parser):
 
     # Load train and test datas
     train, test = load_dataset(train_rate=parser.trainrate)
-    valid = train.perm(0, 30)
-    test = test.perm(0, 150)
+    valid = train.perm(0,1)
+    #valid = train.perm(0, 30)
+    #test = test.perm(0, 150)
 
     # Create Reporter Object
     reporter = rp.Reporter(parser=parser)
@@ -56,7 +57,8 @@ def train(parser):
 
     # Train the model
     epochs = parser.epoch
-    batch_size = parser.batchsize
+    batch_size = 3
+    #batch_size = parser.batchsize
     is_augment = parser.augmentation
     train_dict = {model_unet.inputs: valid.images_original, model_unet.teacher: valid.images_segmented,
                   model_unet.is_training: False}
@@ -73,7 +75,8 @@ def train(parser):
                                             model_unet.is_training: True})
 
         # Evaluation
-        if epoch % 1 == 0:
+        #if epoch % 1 == 0:
+        if True:
             loss_train = sess.run(cross_entropy, feed_dict=train_dict)
             loss_test = sess.run(cross_entropy, feed_dict=test_dict)
             accuracy_train = sess.run(accuracy, feed_dict=train_dict)
@@ -83,7 +86,8 @@ def train(parser):
             print("[Test]  Loss:", loss_test, "Accuracy:", accuracy_test)
             #accuracy_fig.add([accuracy_train, accuracy_test], is_update=True)
             #loss_fig.add([loss_train, loss_test], is_update=True)
-            if epoch % 3 == 0:
+
+            '''if epoch % 3 == 0:
                 idx_train = random.randrange(10)
                 idx_test = random.randrange(100)
                 outputs_train = sess.run(model_unet.outputs,
@@ -95,8 +99,10 @@ def train(parser):
                 train_set = [train.images_original[idx_train], outputs_train[0], train.images_segmented[idx_train]]
                 test_set = [test.images_original[idx_test], outputs_test[0], test.images_segmented[idx_test]]
                 reporter.save_image_from_ndarray(train_set, test_set, train.palette, epoch,
-                                                 index_void=len(ld.DataSet.CATEGORY)-1)
-        saver.save(sess, './model/deploy.ckpt')
+                                                 index_void=len(ld.DataSet.CATEGORY)-1)'''
+
+
+        saver.save(sess, './model/cell/deploy.ckpt')
         print("in=", model_unet.inputs.name)
         print("on=", model_unet.outputs.name)
 
