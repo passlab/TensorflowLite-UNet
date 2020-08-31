@@ -13,8 +13,8 @@ from util import repoter as rp
 
 
 def load_dataset(train_rate):
-    loader = ld.Loader(dir_original="data_set/ISBI/JPEGImages",
-                       dir_segmented="data_set/ISBI/SegmentationClass")
+    loader = ld.Loader(dir_original="data_set/ISBI/JPEGImagesOUT",
+                       dir_segmented="data_set/ISBI/SegmentationClassOUT")
     return loader.load_train_test(train_rate=0.80, shuffle=False)
 
 

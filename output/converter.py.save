@@ -1,0 +1,43 @@
+#from tensorflow.contrib import lite 
+#import tensorflow as tf 
+#from tensorflow.contrib import lite
+#tf.lite.TocoConverter.from_saved_model(saved_model_dir='~/TensorflowLite-UNet/model/cell',output_arrays='final_result')
+
+import tensorflow as tf
+
+frozen='saved_model.pb'
+input_tensor='input'
+output_tensor='output'
+frozen_graph_def=tf.GraphDef()
+with open(frozen,'rb') as f:
+        frozen_graph_def.ParseFromString(f.read())
+tflite_model=tf.lite.toco_convert(frozen_graph_def,input_tensor,output_tensor)
+
+#from PIL import Image
+#im=Image.open('0000_0000.png')
+#im.show()
+
+
+
+
+#gf = tf.GraphDef()
+#gf.ParseFromString(open(frozen,'rb').read())
+#[n.name + '=>' +  n.op for n in gf.node if n.op in ( 'Softmax','Placeholder')]    
+#[n.name + '=>' +  n.op for n in gf.node if n.op in ( 'Softmax','Mul')]
+
+
+
+#print(dir(tf.contrib))
+
+
+#print("----")
+
+#print(dir(tf.contrib))
+
+
+#import tensorflow
+#print(tensorflow.__version__)
+
+#'lite' in dir(tensorflow.contrib)
+
+#print('lite' in dir(tf))
