@@ -1,0 +1,11 @@
+toco \
+--graph_def_file=semanticsegmentation_frozen_cell.pb \
+--input_format=TENSORFLOW_GRAPHDEF \
+--output_format=TFLITE \
+--output_file=semanticsegmentation_frozen_cell.tflite \
+--input_shapes=1,256,256,3 \
+--inference_type=FLOAT \
+--input_type=FLOAT \
+--input_arrays=input \
+--output_arrays=output/BiasAdd \
+--post_training_quantize
